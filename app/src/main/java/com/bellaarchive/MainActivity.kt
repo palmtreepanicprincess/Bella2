@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalTextStyle provides androidx.compose.ui.text.TextStyle(fontFamily = FontFamily.Serif)) {
-                    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF0A1A3A)) {
+                    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF1A0A2E)) {
                         PresidentialBinderApp()
                     }
                 }
@@ -99,9 +99,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val Navy = Color(0xFF2D1B3D)
-private val NavyLight = Color(0xFF4A2C6B)
-private val Gold = Color(0xFFFFB6C1)
+private val Navy = Color(0xFF5A189A)
+private val NavyLight = Color(0xFF7B2CBF)
+private val Gold = Color(0xFFFF69B4)
 private val Paper = Color(0xFFF4ECD8)
 private val Ink = Color(0xFF1A1410)
 
@@ -121,7 +121,7 @@ fun PresidentialBinderApp() {
     }
     Box(
         modifier = Modifier.fillMaxSize().systemBarsPadding()
-            .background(Brush.radialGradient(listOf(NavyLight, Navy, Color(0xFF050E22)))),
+            .background(Brush.radialGradient(listOf(Color(0xFF7B2CBF), Color(0xFF5A189A), Color(0xFF240046)))),
         contentAlignment = Alignment.Center
     ) {
         if (!opened) {
@@ -133,10 +133,9 @@ fun PresidentialBinderApp() {
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("BELLA'S ARCHIVE", color = Gold, fontSize = 13.sp, letterSpacing = 3.sp, fontWeight = FontWeight.Bold)
+                    Text("🐱", fontSize = 48.sp)
                     Spacer(Modifier.height(6.dp))
-                    Text("PRESIDENT", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
-                    Text("TRUMP", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+                    Text("Bella's Archive", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
                     Spacer(Modifier.height(16.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { repeat(4) { Box(Modifier.size(14.dp).clip(RoundedCornerShape(7.dp)).background(Gold)) } }
                     Spacer(Modifier.height(24.dp))
@@ -183,7 +182,7 @@ fun ArchiveInterior() {
     var selected by remember { mutableStateOf<Item?>(null) }
     var fullScreen by remember { mutableStateOf<String?>(null) }
     var tab by remember { mutableStateOf(0) }
-    val tabs = listOf("ALL", "PHOTOS", "TRUTH", "NOTES")
+    val tabs = listOf("ALL", "PHOTOS", "BIO", "NOTES")
     var editItem by remember { mutableStateOf<Item?>(null) }
     var editText by remember { mutableStateOf("") }
     var editNote by remember { mutableStateOf("") }
@@ -292,22 +291,14 @@ fun ArchiveInterior() {
             if (isFolded) {
                 Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
             Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
-            Text("🐱", fontSize = 24.sp)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("BELLA'S ARCHIVE", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
-                Text("by May", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
-                Text("BELLA'S MEMORIES", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp)
+                Text("Bella's Archive by May", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
             }
-            Text("🐱", fontSize = 24.sp)
             } else {
                 Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
-                Seal()
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("BELLA", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
-                    Text("BELLA'S ARCHIVE", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
-                    Text("BELLA'S MEMORIES", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp)
+                    Text("Bella's Archive by May", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
                 }
-                Seal()
                 Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
             }
         }
@@ -321,17 +312,15 @@ fun ArchiveInterior() {
         Row(Modifier.fillMaxSize().padding(8.dp)) {
             Column(Modifier.weight(1f).fillMaxHeight().padding(end = 4.dp)) {
                 when (tab) {
-                    3 -> {
-                        Text("TRUTH SOCIAL", color = Gold, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        Spacer(Modifier.height(8.dp))
-                        Column(Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                            Text("TRUTH SOCIAL", color = Gold, fontSize = 18.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+                    2 -> {
+                        var bio by remember { mutableStateOf(prefs.getString("bio", "") ?: "") }
+                        Column(Modifier.fillMaxSize().padding(8.dp)) {
+                            Text("ABOUT BELLA", color = Gold, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                             Spacer(Modifier.height(8.dp))
-                            Text("This tab is reserved for future content.", color = Color.White, fontSize = 13.sp, textAlign = TextAlign.Center)
-                            Spacer(Modifier.height(16.dp))
+                            TextField(value = bio, onValueChange = { bio = it; prefs.edit().putString("bio", bio).apply() }, modifier = Modifier.fillMaxSize(), label = { Text("Write about Bella...") })
                         }
                     }
-                    4 -> {
+                    3 -> {
                         Button(onClick = { showNoteDialog = true }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD NOTE", fontWeight = FontWeight.Bold) }
                         Spacer(Modifier.height(8.dp))
                         LazyColumn(Modifier.fillMaxSize()) {
