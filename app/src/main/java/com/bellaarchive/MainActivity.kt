@@ -183,13 +183,13 @@ fun ArchiveInterior() {
     var selected by remember { mutableStateOf<Item?>(null) }
     var fullScreen by remember { mutableStateOf<String?>(null) }
     var tab by remember { mutableStateOf(0) }
-    val tabs = listOf("ALL", "LETTERS", "PHOTOS", "TRUTH", "NOTES")
+    val tabs = listOf("ALL", "PHOTOS", "TRUTH", "NOTES")
     var editItem by remember { mutableStateOf<Item?>(null) }
     var editText by remember { mutableStateOf("") }
     var editNote by remember { mutableStateOf("") }
     var editType by remember { mutableStateOf("") }
     var showConfirm by remember { mutableStateOf(false) }
-    var dedication by remember { mutableStateOf(prefs.getString("dedication", "To the memories of the Trump White House.") ?: "") }
+    var dedication by remember { mutableStateOf(prefs.getString("dedication", "Bella is our beloved cat. This archive holds her memories.") ?: "") }
     var showDedication by remember { mutableStateOf(true) }
     var player by remember { mutableStateOf<android.media.MediaPlayer?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -230,7 +230,7 @@ fun ArchiveInterior() {
     }
     if (showDedication) {
         Column(Modifier.fillMaxSize().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text("DEDICATION", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
+            Text("ABOUT BELLA", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
             if (editingDedication) {
                 TextField(value = dedication, onValueChange = { dedication = it }, modifier = Modifier.fillMaxWidth())
@@ -261,8 +261,7 @@ fun ArchiveInterior() {
     }
 
     val filtered = (when (tab) {
-        1 -> items.filter { it.type == "Letter" }
-        2 -> items.filter { it.type == "Photo" }
+        1 -> items.filter { it.type == "Photo" }
         else -> items
     }).sortedByDescending { it.favorite }
 
@@ -292,14 +291,14 @@ fun ArchiveInterior() {
             val isFolded = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 400
             if (isFolded) {
                 Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
-                Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
-                Seal()
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("BELLA", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
-                    Text("BELLA'S ARCHIVE", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
-                    Text("BELLA'S MEMORIES", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp)
-                }
-                Seal()
+            Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
+            Text("🐱", fontSize = 24.sp)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("BELLA'S ARCHIVE", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
+                Text("by May", color = Gold, fontSize = 14.sp, letterSpacing = 4.sp, fontWeight = FontWeight.Bold)
+                Text("BELLA'S MEMORIES", color = Color.White.copy(alpha = 0.8f), fontSize = 11.sp)
+            }
+            Text("🐱", fontSize = 24.sp)
             } else {
                 Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
                 Seal()
@@ -328,12 +327,8 @@ fun ArchiveInterior() {
                         Column(Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                             Text("TRUTH SOCIAL", color = Gold, fontSize = 18.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
                             Spacer(Modifier.height(8.dp))
-                            Text("This opens Donald Trump's official Truth Social profile in your browser, where you can read his latest posts in date order.", color = Color.White, fontSize = 13.sp, textAlign = TextAlign.Center)
+                            Text("This tab is reserved for future content.", color = Color.White, fontSize = 13.sp, textAlign = TextAlign.Center)
                             Spacer(Modifier.height(16.dp))
-                            Button(onClick = {
-                                val i = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://truthsocial.com/@realDonaldTrump"))
-                                context.startActivity(i)
-                            }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Open Trump's Truth Social") }
                         }
                     }
                     4 -> {
