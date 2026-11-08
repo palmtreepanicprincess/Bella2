@@ -316,6 +316,9 @@ fun ArchiveInterior() {
         }
         Spacer(Modifier.height(8.dp))
         Row(Modifier.weight(1f).padding(8.dp)) {
+            Column(Modifier.width(24.dp).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
+                repeat(6) { Text("🐾", fontSize = 12.sp) }
+            }
             Column(Modifier.weight(1f).fillMaxHeight().padding(end = 4.dp)) {
                 when (tab) {
                     2 -> {
@@ -424,8 +427,8 @@ fun ArchiveInterior() {
                         }
                     }
                 }
-            Column(Modifier.weight(1f).fillMaxHeight().padding(start = 4.dp)) {
-                // viewer removed; details in popup
+            Column(Modifier.width(24.dp).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
+                repeat(6) { Text("🐾", fontSize = 12.sp) }
             }
         }
         }
