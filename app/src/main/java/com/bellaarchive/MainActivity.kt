@@ -303,15 +303,26 @@ fun ArchiveInterior() {
             }
         }
         Spacer(Modifier.height(8.dp))
-        Row(Modifier.fillMaxSize().padding(8.dp)) {
+        Row(Modifier.weight(1f).padding(8.dp)) {
             Column(Modifier.weight(1f).fillMaxHeight().padding(end = 4.dp)) {
                 when (tab) {
                     2 -> {
-                        var bio by remember { mutableStateOf(prefs.getString("bio", "") ?: "") }
+                        var bioPosts by remember { mutableStateOf(prefs.getString("bioPosts", "")!!.split("||").filter { it.isNotBlank() }.toMutableList()) }
+                        var newBio by remember { mutableStateOf("") }
                         Column(Modifier.fillMaxSize().padding(8.dp)) {
                             Text("ABOUT BELLA", color = Gold, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                             Spacer(Modifier.height(8.dp))
-                            TextField(value = bio, onValueChange = { bio = it; prefs.edit().putString("bio", bio).apply() }, modifier = Modifier.fillMaxSize(), label = { Text("Write about Bella...") })
+                            TextField(value = newBio, onValueChange = { newBio = it }, modifier = Modifier.height(120.dp), label = { Text("Write about Bella...") })
+                            Spacer(Modifier.height(8.dp))
+                            Button(onClick = { if (newBio.isNotBlank()) { bioPosts = (listOf(newBio) + bioPosts).toMutableList(); prefs.edit().putString("bioPosts", bioPosts.joinToString("||")).apply(); newBio = "" } }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Post") }
+                            Spacer(Modifier.height(8.dp))
+                            LazyColumn(Modifier.fillMaxSize()) {
+                                items(bioPosts) { post ->
+                                    Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                        Text(post, color = Color.White, modifier = Modifier.padding(10.dp), fontSize = 13.sp)
+                                    }
+                                }
+                            }
                         }
                     }
                     3 -> {
