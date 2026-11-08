@@ -432,7 +432,7 @@ fun ArchiveInterior() {
         Spacer(Modifier.height(4.dp))
         Row(Modifier.fillMaxWidth().background(NavyLight).padding(4.dp).horizontalScroll(androidx.compose.foundation.rememberScrollState()), horizontalArrangement = Arrangement.Center) {
             tabs.forEachIndexed { i, t ->
-                Tab(selected = tab == i, onClick = { tab = i }, text = { Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold) }, modifier = Modifier.padding(horizontal = 4.dp))
+                Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp).clickable { tab = i })
             }
         }
     }
