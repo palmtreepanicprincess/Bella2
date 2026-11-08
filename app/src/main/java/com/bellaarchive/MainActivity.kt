@@ -134,7 +134,7 @@ fun PresidentialBinderApp() {
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Bella's Archive", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
+                    Text("Bella's Archive", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive, textAlign = TextAlign.Center)
                 }
             }
         } else {
