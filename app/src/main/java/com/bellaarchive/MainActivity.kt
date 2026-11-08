@@ -60,6 +60,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -376,7 +379,23 @@ fun ArchiveInterior() {
                         }
                     }
                     else -> {
-                        Column(Modifier.fillMaxWidth().clickable { selected = null }) {
+                        Column(Modifier.fillMaxWidth().drawBehind {
+                            if (tab == 0) {
+                                val paw = Color(0xFFF78FB3).copy(alpha = 0.6f)
+                                val step = 76.dp.toPx()
+                                var y = 34.dp.toPx()
+                                while (y < size.height) {
+                                    for (cx in listOf(15.dp.toPx(), size.width - 15.dp.toPx())) {
+                                        drawOval(paw, topLeft = Offset(cx - 8.dp.toPx(), y - 6.dp.toPx()), size = Size(16.dp.toPx(), 12.dp.toPx()))
+                                        drawOval(paw, topLeft = Offset(cx - 12.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                                        drawOval(paw, topLeft = Offset(cx - 5.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                                        drawOval(paw, topLeft = Offset(cx + 0.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                                        drawOval(paw, topLeft = Offset(cx + 6.5.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                                    }
+                                    y += step
+                                }
+                            }
+                        }.padding(horizontal = if (tab == 0) 30.dp else 0.dp).clickable { selected = null }) {
                             if (tab == 0) {
                                 Spacer(Modifier.height(8.dp))
                                 Text("Bio", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold)
@@ -424,7 +443,7 @@ fun ArchiveInterior() {
             }
         }
     }
-    FloatingActionButton(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 68.dp), containerColor = Gold) {
+    FloatingActionButton(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.align(Alignment.BottomEnd).padding(end = if (tab == 0) 42.dp else 16.dp, bottom = 68.dp), containerColor = Gold) {
         Text("ADD", color = Navy, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 	
