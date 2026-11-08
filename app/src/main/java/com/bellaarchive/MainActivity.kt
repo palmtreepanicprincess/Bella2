@@ -433,7 +433,9 @@ fun ArchiveInterior() {
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             tabs.forEachIndexed { i, t ->
-                Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp).clickable { tab = i })
+                Button(onClick = { tab = i }, colors = ButtonDefaults.buttonColors(containerColor = if (tab == i) Gold else NavyLight, contentColor = if (tab == i) Navy else Color.White), modifier = Modifier.padding(horizontal = 4.dp)) {
+                    Text(t, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
