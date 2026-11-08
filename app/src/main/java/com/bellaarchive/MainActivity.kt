@@ -248,7 +248,6 @@ fun ArchiveInterior() {
         val pItem = items.firstOrNull { it.uri == popupImage }
         AlertDialog(
             onDismissRequest = { popupImage = null },
-            title = { Text(pItem?.title ?: "Item", color = Color.White) },
             text = {
                 Column {
                     AsyncImage(model = Uri.parse(popupImage), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(300.dp).clickable { fullScreen = popupImage; popupImage = null })
@@ -442,8 +441,8 @@ fun ArchiveInterior() {
     if (editItem != null) {
         AlertDialog(
             onDismissRequest = { editItem = null },
-            title = { Text("Rename", color = Color.White) },
-            text = { Column { TextField(value = editText, onValueChange = { editText = it }, label = { Text("Title") }); Spacer(Modifier.height(8.dp)); Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { Button(onClick = { editType = "Letter" }, colors = ButtonDefaults.buttonColors(containerColor = if (editType == "Letter") Gold else NavyLight)) { Text("Letter") }; Button(onClick = { editType = "Photo" }, colors = ButtonDefaults.buttonColors(containerColor = if (editType == "Photo") Gold else NavyLight)) { Text("Photo") } }; Spacer(Modifier.height(8.dp)); TextField(value = editNote, onValueChange = { editNote = it }, label = { Text("Story note") }); Spacer(Modifier.height(8.dp)); Button(onClick = { editItem!!.favorite = !editItem!!.favorite }, colors = ButtonDefaults.buttonColors(containerColor = if (editItem!!.favorite) Gold else NavyLight)) { Text(if (editItem!!.favorite) "Favourited" else "Favourite") } } },
+            title = { Text("Edit", color = Color.White) },
+            text = { Column { Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { Button(onClick = { editType = "Letter" }, colors = ButtonDefaults.buttonColors(containerColor = if (editType == "Letter") Gold else NavyLight)) { Text("Letter") }; Button(onClick = { editType = "Photo" }, colors = ButtonDefaults.buttonColors(containerColor = if (editType == "Photo") Gold else NavyLight)) { Text("Photo") } }; Spacer(Modifier.height(8.dp)); TextField(value = editNote, onValueChange = { editNote = it }, label = { Text("Story note") }); Spacer(Modifier.height(8.dp)); Button(onClick = { editItem!!.favorite = !editItem!!.favorite }, colors = ButtonDefaults.buttonColors(containerColor = if (editItem!!.favorite) Gold else NavyLight)) { Text(if (editItem!!.favorite) "Favourited" else "Favourite") } } },
             confirmButton = { Button(onClick = { editItem!!.title = editText; editItem!!.note = editNote; editItem!!.type = editType; items = items.toMutableList(); save(items); editItem = null }) { Text("Save") } },
             dismissButton = { Button(onClick = { editItem = null }) { Text("Cancel") } },
             containerColor = NavyLight
