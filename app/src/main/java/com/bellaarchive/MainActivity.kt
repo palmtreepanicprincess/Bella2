@@ -243,12 +243,23 @@ fun ArchiveInterior() {
         return
     }
     if (popupImage != null) {
+        val pItem = items.firstOrNull { it.uri == popupImage }
         AlertDialog(
             onDismissRequest = { popupImage = null },
-            title = {},
-            text = { AsyncImage(model = Uri.parse(popupImage), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(400.dp).clickable { fullScreen = popupImage; popupImage = null }) },
+            title = { Text(pItem?.title ?: "Item", color = Color.White) },
+            text = {
+                Column {
+                    AsyncImage(model = Uri.parse(popupImage), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(300.dp).clickable { fullScreen = popupImage; popupImage = null })
+                    if (!pItem?.note.isNullOrBlank()) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(pItem!!.note, color = Color.White, fontSize = 12.sp)
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Button(onClick = { if (pItem != null) { items = items.filter { it != pItem }.toMutableList(); save(items); popupImage = null } }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000))) { Text("Delete") }
+                }
+            },
             confirmButton = { Button(onClick = { popupImage = null }) { Text("Close") } },
-            containerColor = Color.Black
+            containerColor = NavyLight
         )
     }
     if (fullScreen != null) {
@@ -414,40 +425,7 @@ fun ArchiveInterior() {
                     }
                 }
             Column(Modifier.weight(1f).fillMaxHeight().padding(start = 4.dp)) {
-                if (selected != null) {
-                    val item = selected!!
-                    val uri = Uri.parse(item.uri)
-                    val mime = try { context.contentResolver.getType(uri) } catch (_: Exception) { null }
-                    val isImg = (mime?.startsWith("image/") == true) || item.type == "Photo"
-                    Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), modifier = Modifier.fillMaxSize()) {
-                        Column(Modifier.padding(16.dp).verticalScroll(androidx.compose.foundation.rememberScrollState())) {
-                            Text(item.type.uppercase(), color = Gold, fontSize = 11.sp, letterSpacing = 2.sp, fontWeight = FontWeight.Bold)
-                            Spacer(Modifier.height(8.dp))
-                            Text(item.title, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif)
-                            if (item.note.isNotBlank()) { Spacer(Modifier.height(8.dp)); Text(item.note, color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp, fontFamily = FontFamily.Serif) }
-                            Spacer(Modifier.height(12.dp))
-                            if (isImg) {
-                                AsyncImage(model = uri, contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(400.dp).clickable { fullScreen = item.uri })
-                            }
-                            Spacer(Modifier.height(12.dp))
-                            androidx.compose.material3.TextButton(onClick = { showConfirm = true }) { Text("delete", color = Color.White.copy(alpha = 0.4f), fontSize = 10.sp) }
-                            if (showConfirm) {
-                                AlertDialog(
-                                    onDismissRequest = { showConfirm = false },
-                                    title = { Text("Delete?", color = Color.White) },
-                                    text = { Text("Remove this item from the app? The original file is not deleted.", color = Color.White) },
-                                    confirmButton = { Button(onClick = { items = items.filter { it != item }.toMutableList(); save(items); selected = null; showConfirm = false }) { Text("Delete") } },
-                                    dismissButton = { Button(onClick = { showConfirm = false }) { Text("Cancel") } },
-                                    containerColor = NavyLight
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Select an item to view", color = Color.White.copy(alpha = 0.6f), fontSize = 14.sp)
-                    }
-                }
+                // viewer removed; details in popup
             }
         }
         }
