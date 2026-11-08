@@ -242,17 +242,13 @@ fun ArchiveInterior() {
         return
     }
     if (fullScreen != null) {
-        val view = LocalView.current
-        androidx.compose.runtime.DisposableEffect(Unit) {
-            val window = (view.context as? android.app.Activity)?.window
-            val controller = window?.let { WindowCompat.getInsetsController(it, view) }
-            controller?.hide(WindowInsetsCompat.Type.statusBars())
-            onDispose { controller?.show(WindowInsetsCompat.Type.statusBars()) }
-        }
-        Box(Modifier.fillMaxSize().background(Color.Black).clickable { fullScreen = null }, contentAlignment = Alignment.Center) {
-            AsyncImage(model = Uri.parse(fullScreen), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
-        }
-        return
+        AlertDialog(
+            onDismissRequest = { fullScreen = null },
+            title = {},
+            text = { AsyncImage(model = Uri.parse(fullScreen), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(400.dp)) },
+            confirmButton = { Button(onClick = { fullScreen = null }) { Text("Close") } },
+            containerColor = Color.Black
+        )
     }
 
     val filtered = (when (tab) {
