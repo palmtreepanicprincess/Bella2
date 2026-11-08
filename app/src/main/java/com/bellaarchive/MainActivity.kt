@@ -40,7 +40,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -430,9 +432,6 @@ fun ArchiveInterior() {
         }
     }
     Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().background(NavyLight).padding(4.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Button(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD", fontWeight = FontWeight.Bold, fontSize = 10.sp) }
-        }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             tabs.forEachIndexed { i, t ->
                 Button(onClick = { tab = i }, colors = ButtonDefaults.buttonColors(containerColor = if (tab == i) Gold else NavyLight, contentColor = if (tab == i) Navy else Color.White), modifier = Modifier.padding(horizontal = 4.dp)) {
@@ -440,6 +439,9 @@ fun ArchiveInterior() {
                 }
             }
         }
+    }
+    FloatingActionButton(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp), containerColor = Gold) {
+        Text("ADD", color = Navy, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 	
     if (showNoteDialog) {
