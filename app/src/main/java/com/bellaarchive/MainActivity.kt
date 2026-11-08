@@ -323,7 +323,26 @@ fun ArchiveInterior() {
             }
         }
         Spacer(Modifier.height(8.dp))
-        Column(Modifier.weight(1f).padding(8.dp).verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+        Column(Modifier.weight(1f).drawBehind {
+            if (tab == 0) {
+                val paw = Color(0xFFF78FB3).copy(alpha = 0.6f)
+                val step = 54.dp.toPx()
+                var y = 30.dp.toPx()
+                var i = 0
+                while (y < size.height + step) {
+                    val zig = if (i % 2 == 0) 0f else 11.dp.toPx()
+                    for (cx in listOf(13.dp.toPx() + zig, size.width - 13.dp.toPx() - zig)) {
+                        drawOval(paw, topLeft = Offset(cx - 8.dp.toPx(), y - 6.dp.toPx()), size = Size(16.dp.toPx(), 12.dp.toPx()))
+                        drawOval(paw, topLeft = Offset(cx - 12.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                        drawOval(paw, topLeft = Offset(cx - 5.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                        drawOval(paw, topLeft = Offset(cx + 0.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                        drawOval(paw, topLeft = Offset(cx + 6.5.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
+                    }
+                    y += step
+                    i++
+                }
+            }
+        }.padding(8.dp).verticalScroll(androidx.compose.foundation.rememberScrollState())) {
             Column(Modifier.fillMaxWidth()) {
                 when (tab) {
                     2 -> {
@@ -379,23 +398,7 @@ fun ArchiveInterior() {
                         }
                     }
                     else -> {
-                        Column(Modifier.fillMaxWidth().drawBehind {
-                            if (tab == 0) {
-                                val paw = Color(0xFFF78FB3).copy(alpha = 0.6f)
-                                val step = 76.dp.toPx()
-                                var y = 34.dp.toPx()
-                                while (y < size.height) {
-                                    for (cx in listOf(15.dp.toPx(), size.width - 15.dp.toPx())) {
-                                        drawOval(paw, topLeft = Offset(cx - 8.dp.toPx(), y - 6.dp.toPx()), size = Size(16.dp.toPx(), 12.dp.toPx()))
-                                        drawOval(paw, topLeft = Offset(cx - 12.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
-                                        drawOval(paw, topLeft = Offset(cx - 5.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
-                                        drawOval(paw, topLeft = Offset(cx + 0.5.dp.toPx(), y - 17.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
-                                        drawOval(paw, topLeft = Offset(cx + 6.5.dp.toPx(), y - 14.dp.toPx()), size = Size(5.5.dp.toPx(), 5.5.dp.toPx()))
-                                    }
-                                    y += step
-                                }
-                            }
-                        }.padding(horizontal = if (tab == 0) 30.dp else 0.dp).clickable { selected = null }) {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = if (tab == 0) 30.dp else 0.dp).clickable { selected = null }) {
                             if (tab == 0) {
                                 Spacer(Modifier.height(8.dp))
                                 Text("Bio", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold)
