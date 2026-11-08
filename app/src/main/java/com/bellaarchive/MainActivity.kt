@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -127,19 +128,15 @@ fun PresidentialBinderApp() {
         if (!opened) {
             Box(
                 modifier = Modifier.scale(scale.value).graphicsLayer { rotationY = rotation.value }
-                    .size(width = 260.dp, height = 340.dp).clip(RoundedCornerShape(8.dp))
-                    .background(Brush.verticalGradient(listOf(NavyLight, Navy)))
-                    .border(2.dp, Gold, RoundedCornerShape(8.dp)).padding(24.dp),
+                    .size(width = 200.dp, height = 200.dp).clip(CircleShape)
+                    .background(Brush.radialGradient(listOf(NavyLight, Navy)))
+                    .border(2.dp, Gold, CircleShape).padding(24.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("🐱", fontSize = 48.sp)
+                    Text("🐱", fontSize = 64.sp)
                     Spacer(Modifier.height(6.dp))
                     Text("Bella's Archive", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
-                    Spacer(Modifier.height(16.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { repeat(4) { Box(Modifier.size(14.dp).clip(RoundedCornerShape(7.dp)).background(Gold)) } }
-                    Spacer(Modifier.height(24.dp))
-                    Text("MEMORIES & MOMENTS", color = Gold, fontSize = 11.sp, letterSpacing = 2.sp)
                 }
             }
         } else {
@@ -204,6 +201,7 @@ fun ArchiveInterior() {
             val v = context.getSystemService(android.os.Vibrator::class.java)
             v?.vibrate(android.os.VibrationEffect.createOneShot(200, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
             val mp = android.media.MediaPlayer.create(context, com.bellaarchive.R.raw.hold_on)
+            mp?.setVolume(0.5f, 0.5f)
             mp?.start()
             player = mp
         }
@@ -281,7 +279,9 @@ fun ArchiveInterior() {
     var newNote by remember { mutableStateOf("") }
     var showNoteDialog by remember { mutableStateOf(false) }
 
-    Column(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize()) {
+        Text("❤️", fontSize = 200.sp, modifier = Modifier.align(Alignment.Center), color = Color.White.copy(alpha = 0.08f))
+        Column(Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.fillMaxWidth().background(NavyLight).padding(12.dp).horizontalScroll(androidx.compose.foundation.rememberScrollState()),
             verticalAlignment = Alignment.CenterVertically,
@@ -289,23 +289,17 @@ fun ArchiveInterior() {
         ) {
             val isFolded = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 400
             if (isFolded) {
-                Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
+                Button(onClick = { player?.setVolume(0.5f, 0.5f); player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
             Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("Bella's Archive by May", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
             }
             } else {
-                Button(onClick = { player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
+                Button(onClick = { player?.setVolume(0.5f, 0.5f); player?.start() }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Play", fontSize = 9.sp) }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Bella's Archive by May", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive)
                 }
                 Button(onClick = { player?.pause() }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Stop", fontSize = 9.sp) }
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        Row(Modifier.fillMaxWidth().background(NavyLight).padding(4.dp).horizontalScroll(androidx.compose.foundation.rememberScrollState()), horizontalArrangement = Arrangement.Center) {
-            tabs.forEachIndexed { i, t ->
-                Tab(selected = tab == i, onClick = { tab = i }, text = { Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold) }, modifier = Modifier.padding(horizontal = 4.dp))
             }
         }
         Spacer(Modifier.height(8.dp))
@@ -365,8 +359,6 @@ fun ArchiveInterior() {
                         }
                     }
                     else -> {
-                        Button(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD", fontWeight = FontWeight.Bold) }
-                        Spacer(Modifier.height(8.dp))
                         Column(Modifier.fillMaxWidth().clickable { selected = null }) {
                             androidx.compose.foundation.layout.FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 filtered.forEach { item ->
@@ -422,8 +414,19 @@ fun ArchiveInterior() {
                 }
             }
         }
+        Spacer(Modifier.height(8.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Button(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD", fontWeight = FontWeight.Bold, fontSize = 10.sp) }
+        }
+        Spacer(Modifier.height(4.dp))
+        Row(Modifier.fillMaxWidth().background(NavyLight).padding(4.dp).horizontalScroll(androidx.compose.foundation.rememberScrollState()), horizontalArrangement = Arrangement.Center) {
+            tabs.forEachIndexed { i, t ->
+                Tab(selected = tab == i, onClick = { tab = i }, text = { Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold) }, modifier = Modifier.padding(horizontal = 4.dp))
+            }
+        }
     }
-
+    }
+	
     if (showNoteDialog) {
         AlertDialog(
             onDismissRequest = { showNoteDialog = false },
