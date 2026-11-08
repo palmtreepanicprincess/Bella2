@@ -319,7 +319,15 @@ fun ArchiveInterior() {
                             LazyColumn(Modifier.fillMaxSize()) {
                                 items(bioPosts) { post ->
                                     Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-                                        Text(post, color = Color.White, modifier = Modifier.padding(10.dp), fontSize = 13.sp)
+                                        Column(Modifier.padding(10.dp)) {
+                                            Text(post, color = Color.White, fontSize = 13.sp)
+                                            Spacer(Modifier.height(4.dp))
+                                            var confirmDel by remember { mutableStateOf(false) }
+                                            androidx.compose.material3.TextButton(onClick = { confirmDel = true }) { Text("delete", color = Color.White.copy(alpha = 0.4f), fontSize = 10.sp) }
+                                            if (confirmDel) {
+                                                AlertDialog(onDismissRequest = { confirmDel = false }, title = { Text("Delete?", color = Color.White) }, text = { Text("This cannot be undone.", color = Color.White) }, confirmButton = { Button(onClick = { bioPosts = bioPosts.filter { it != post }.toMutableList(); prefs.edit().putString("bioPosts", bioPosts.joinToString("||")).apply(); confirmDel = false }) { Text("Delete") } }, dismissButton = { Button(onClick = { confirmDel = false }) { Text("Cancel") } }, containerColor = NavyLight)
+                                            }
+                                        }
                                     }
                                 }
                             }
