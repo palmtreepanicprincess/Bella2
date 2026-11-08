@@ -369,6 +369,12 @@ fun ArchiveInterior() {
                                 }
                             }
                         }
+                        Spacer(Modifier.height(8.dp))
+                        var confirmClear by remember { mutableStateOf(false) }
+                        Button(onClick = { confirmClear = true }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000))) { Text("DELETE ALL NOTES", fontWeight = FontWeight.Bold) }
+                        if (confirmClear) {
+                            AlertDialog(onDismissRequest = { confirmClear = false }, title = { Text("Delete all notes?", color = Color.White) }, text = { Text("This will remove every note in the app. This cannot be undone.", color = Color.White) }, confirmButton = { Button(onClick = { notes = mutableListOf(); saveNotes(notes); confirmClear = false }) { Text("Delete") } }, dismissButton = { Button(onClick = { confirmClear = false }) { Text("Cancel") } }, containerColor = NavyLight)
+                        }
                     }
                     else -> {
                         Column(Modifier.fillMaxWidth().clickable { selected = null }) {
