@@ -425,17 +425,17 @@ fun ArchiveInterior() {
                 }
             }
         }
-        Spacer(Modifier.height(8.dp))
+        }
+    }
+    Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().background(NavyLight).padding(4.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Button(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD", fontWeight = FontWeight.Bold, fontSize = 10.sp) }
         }
-        Spacer(Modifier.height(4.dp))
-        Row(Modifier.fillMaxWidth().background(NavyLight).padding(8.dp), horizontalArrangement = Arrangement.Center) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             tabs.forEachIndexed { i, t ->
                 Text(t, color = if (tab == i) Gold else Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 8.dp).clickable { tab = i })
             }
         }
-    }
     }
 	
     if (showNoteDialog) {
