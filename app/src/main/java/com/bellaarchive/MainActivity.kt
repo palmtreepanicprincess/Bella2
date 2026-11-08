@@ -334,8 +334,8 @@ fun ArchiveInterior() {
                             Spacer(Modifier.height(8.dp))
                             Button(onClick = { if (newBio.isNotBlank()) { bioPosts = (listOf(newBio) + bioPosts).toMutableList(); prefs.edit().putString("bioPosts", bioPosts.joinToString("||")).apply(); newBio = "" } }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Post") }
                             Spacer(Modifier.height(8.dp))
-                            LazyColumn(Modifier.fillMaxSize()) {
-                                items(bioPosts) { post ->
+                            Column(Modifier.fillMaxWidth()) {
+                                bioPosts.forEach { post ->
                                     Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                                         Column(Modifier.padding(10.dp)) {
                                             Text(post, color = Color.White, fontSize = 13.sp)
@@ -354,8 +354,8 @@ fun ArchiveInterior() {
                     3 -> {
                         Button(onClick = { showNoteDialog = true }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("ADD NOTE", fontWeight = FontWeight.Bold) }
                         Spacer(Modifier.height(8.dp))
-                        LazyColumn(Modifier.fillMaxSize()) {
-                            items(notes) { note ->
+                        Column(Modifier.fillMaxWidth()) {
+                            notes.forEach { note ->
                                 Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                                     Column(Modifier.padding(10.dp)) {
                                         Text(note.text, color = Color.White, fontSize = 13.sp)
@@ -444,7 +444,7 @@ fun ArchiveInterior() {
             }
         }
     }
-    FloatingActionButton(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp), containerColor = Gold) {
+    FloatingActionButton(onClick = { picker.launch(arrayOf("image/*", "application/pdf", "*/*")) }, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 68.dp), containerColor = Gold) {
         Text("ADD", color = Navy, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 	
