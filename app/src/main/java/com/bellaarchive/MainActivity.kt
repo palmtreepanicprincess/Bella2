@@ -257,7 +257,11 @@ fun ArchiveInterior() {
                         Text(pItem!!.note, color = Color.White, fontSize = 12.sp)
                     }
                     Spacer(Modifier.height(8.dp))
-                    Button(onClick = { if (pItem != null) { items = items.filter { it != pItem }.toMutableList(); save(items); popupImage = null } }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000))) { Text("Delete") }
+                    var confirmDel by remember { mutableStateOf(false) }
+                    Button(onClick = { confirmDel = true }, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000))) { Text("Delete") }
+                    if (confirmDel) {
+                        AlertDialog(onDismissRequest = { confirmDel = false }, title = { Text("Delete?", color = Color.White) }, text = { Text("Remove this item from the app? The original file is not deleted.", color = Color.White) }, confirmButton = { Button(onClick = { if (pItem != null) { items = items.filter { it != pItem }.toMutableList(); save(items); popupImage = null; confirmDel = false } }) { Text("Delete") } }, dismissButton = { Button(onClick = { confirmDel = false }) { Text("Cancel") } }, containerColor = NavyLight)
+                    }
                 }
             },
             confirmButton = { Button(onClick = { popupImage = null }) { Text("Close") } },
