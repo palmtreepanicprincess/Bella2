@@ -176,6 +176,7 @@ fun ArchiveInterior() {
     var items by remember { mutableStateOf(load()) }
     var selected by remember { mutableStateOf<Item?>(null) }
     var fullScreen by remember { mutableStateOf<String?>(null) }
+    var popupImage by remember { mutableStateOf<String?>(null) }
     var tab by remember { mutableStateOf(0) }
     val tabs = listOf("ALL", "PHOTOS", "BIO", "NOTES")
     var editItem by remember { mutableStateOf<Item?>(null) }
@@ -241,14 +242,20 @@ fun ArchiveInterior() {
         }
         return
     }
-    if (fullScreen != null) {
+    if (popupImage != null) {
         AlertDialog(
-            onDismissRequest = { fullScreen = null },
+            onDismissRequest = { popupImage = null },
             title = {},
-            text = { AsyncImage(model = Uri.parse(fullScreen), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(400.dp)) },
-            confirmButton = { Button(onClick = { fullScreen = null }) { Text("Close") } },
+            text = { AsyncImage(model = Uri.parse(popupImage), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxWidth().height(400.dp).clickable { fullScreen = popupImage; popupImage = null }) },
+            confirmButton = { Button(onClick = { popupImage = null }) { Text("Close") } },
             containerColor = Color.Black
         )
+    }
+    if (fullScreen != null) {
+        Box(Modifier.fillMaxSize().background(Color.Black).clickable { fullScreen = null }, contentAlignment = Alignment.Center) {
+            AsyncImage(model = Uri.parse(fullScreen), contentDescription = null, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
+        }
+        return
     }
 
     val filtered = (when (tab) {
@@ -379,7 +386,7 @@ fun ArchiveInterior() {
                                     val mime = try { context.contentResolver.getType(uri) } catch (_: Exception) { null }
                                     val isImg = (mime?.startsWith("image/") == true) || item.type == "Photo"
                                     if (isImg) {
-                                        AsyncImage(model = uri, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(84.dp).aspectRatio(1f).clip(RoundedCornerShape(4.dp)).border(if (selected == item) 3.dp else 1.dp, if (selected == item) Color.White else Gold, RoundedCornerShape(4.dp)).pointerInput(item) { detectTapGestures(onTap = { selected = item }, onLongPress = { editItem = item; editText = item.title }) })
+                                        AsyncImage(model = uri, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(84.dp).aspectRatio(1f).clip(RoundedCornerShape(4.dp)).border(if (selected == item) 3.dp else 1.dp, if (selected == item) Color.White else Gold, RoundedCornerShape(4.dp)).pointerInput(item) { detectTapGestures(onTap = { selected = item; popupImage = item.uri }, onLongPress = { editItem = item; editText = item.title }) })
                                     } else {
                                         Card(colors = CardDefaults.cardColors(containerColor = Paper), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).clickable { selected = item }.pointerInput(item) { detectTapGestures(onLongPress = { editItem = item; editText = item.title; editNote = item.note; editType = item.type }) }) {
                                             Text(item.title, color = Ink, modifier = Modifier.padding(10.dp), fontSize = 13.sp)
