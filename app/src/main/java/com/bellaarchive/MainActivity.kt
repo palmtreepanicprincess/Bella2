@@ -385,6 +385,22 @@ fun ArchiveInterior() {
                                     }
                                 }
                             }
+                            if (tab == 0) {
+                                Spacer(Modifier.height(8.dp))
+                                Text("Bio", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                prefs.getString("bioPosts", "")!!.split("||").filter { it.isNotBlank() }.forEach { post ->
+                                    Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                                        Text(post, color = Color.White, modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+                                    }
+                                }
+                                Spacer(Modifier.height(8.dp))
+                                Text("Notes", color = Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                notes.forEach { note ->
+                                    Card(colors = CardDefaults.cardColors(containerColor = NavyLight), shape = RoundedCornerShape(4.dp), modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                                        Text(note.text, color = Color.White, modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
