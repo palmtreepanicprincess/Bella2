@@ -369,31 +369,6 @@ fun ArchiveInterior() {
                                 }
                             }
                         }
-                        Spacer(Modifier.height(8.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = {
-                                val f = java.io.File(context.filesDir, "backup.json")
-                                f.writeText(org.json.JSONObject().apply { put("items", org.json.JSONArray().apply { items.forEach { o -> put(org.json.JSONObject().apply { put("uri", o.uri); put("title", o.title); put("type", o.type); put("note", o.note); put("favorite", o.favorite) }) } }); put("notes", org.json.JSONArray().apply { notes.forEach { o -> put(org.json.JSONObject().apply { put("id", o.id); put("text", o.text) }) } }); put("dedication", dedication) }.toString())
-                            }, colors = ButtonDefaults.buttonColors(containerColor = Gold, contentColor = Navy)) { Text("Backup") }
-                            Button(onClick = {
-                                val f = java.io.File(context.filesDir, "backup.json")
-                                if (f.exists()) {
-                                    val o = org.json.JSONObject(f.readText())
-                                    val arr = o.getJSONArray("items")
-                                    val list = mutableListOf<Item>()
-                                    for (i in 0 until arr.length()) { val x = arr.getJSONObject(i); list.add(Item(x.getString("uri"), x.getString("title"), x.getString("type"), x.optString("note", ""), x.optBoolean("favorite", false))) }
-                                    items = list
-                                    save(items)
-                                    val nArr = o.getJSONArray("notes")
-                                    val nList = mutableListOf<Note>()
-                                    for (i in 0 until nArr.length()) { val x = nArr.getJSONObject(i); nList.add(Note(x.getLong("id"), x.getString("text"))) }
-                                    notes = nList
-                                    saveNotes(notes)
-                                    dedication = o.optString("dedication", dedication)
-                                    prefs.edit().putString("dedication", dedication).apply()
-                                }
-                            }, colors = ButtonDefaults.buttonColors(containerColor = NavyLight, contentColor = Gold)) { Text("Restore") }
-                        }
                     }
                     else -> {
                         Column(Modifier.fillMaxWidth().clickable { selected = null }) {
